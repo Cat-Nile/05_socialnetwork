@@ -135,6 +135,9 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend',
     ],
+    'DEFAULT_PAGINATION_CLASS' :
+        'rest_framework.pagination.PageNumberPagination',
+        'PAGE_SIZE': 3,
 }
 
 
@@ -160,4 +163,4 @@ STATIC_URL = '/static/'
 db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(db_from_env)
 
-
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
