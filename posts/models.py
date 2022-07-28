@@ -9,5 +9,5 @@ class Post(models.Model):
     body = models.TextField(null=False)
     likes = models.ManyToManyField(User, related_name='like_posts', blank=True)
     tags = models.CharField(max_length=256, null=False)
-    hits = models.IntegerField(default=0)
+    hits = models.IntegerField(default=1)
     created_at = models.DateTimeField(default=timezone.now)
