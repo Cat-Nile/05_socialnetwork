@@ -4,6 +4,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
 
 from .models import Post
@@ -14,11 +15,18 @@ from .serializers import PostSerializer, PostCreateSerializer
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     permission_classes = [CustomReadOnly]
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['tags']
+    filter_backends = [SearchFilter, OrderingFilter,]
+    search_fields = ['title']
+    ordering_fields = ['created_at', 'hits', 'likes']
+    ordering = ['created_at']
     
     def get_serializer_class(self):
-        if self.action == 'list' or 'retrieve':
+        if self.action == 'list':
+            return PostSerializer
+        elif self.action == 'retrieve':
+            inst=self.get_object()
+            inst.hits += 1
+            inst.save()
             return PostSerializer
         return PostCreateSerializer
     
